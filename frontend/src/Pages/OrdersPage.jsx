@@ -68,41 +68,40 @@ const OrdersPage = () => {
 
   const renderCard = (order) => (
     <Card key={order._id} className="mt-2">
-      <Card.Body className="d-flex justify-content-between flex-row align-items-center">
-        <div>
-          <Card.Title>Order ID: {order._id}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">
-            Customer: {order.user.customerName}
-          </Card.Subtitle>
-          <Card.Text>Total: ${order.totalAmount}</Card.Text>
-          <Card.Text>Status: {order.status}</Card.Text>
-          <Card.Text>{getStatusMessage(order.status)}</Card.Text>
+  <Card.Body className="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+    <div>
+      <Card.Title>Order ID: {order._id}</Card.Title>
+      <Card.Subtitle className="mb-2 text-muted">
+        Customer: {order.user.customerName}
+      </Card.Subtitle>
+      <Card.Text>Total: ${order.totalAmount}</Card.Text>
+      <Card.Text>Status: {order.status}</Card.Text>
+      <Card.Text>{getStatusMessage(order.status)}</Card.Text>
 
-          <div>
-            <h6>Products:</h6>
-            <ul>
-              {order.products.map((product) => (
-                <li key={product._id}>
-                  {product.title} - Quantity: {product.quantity}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="d-flex gap-2">
-          <Link to={`/track_order?orderId=${order._id}`}>
-            <Button variant="info" className="ml-2">
-              Track Order
-            </Button>
-          </Link>
-          {order.status !== "Delivered" && order.status !== "Canceled" && (
-            <Button variant="danger" onClick={() => cancelOrder(order._id)}>
-              Cancel
-            </Button>
-          )}
-        </div>
-      </Card.Body>
-    </Card>
+      <div>
+        <h6>Products:</h6>
+        <ul>
+          {order.products.map((product) => (
+            <li key={product._id}>
+              {product.title} - Quantity: {product.quantity}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+    <div className="d-flex gap-2 mt-3 mt-md-0">
+      <Link to={`/track_order?orderId=${order._id}`}>
+        <Button variant="info">Track Order</Button>
+      </Link>
+      {order.status !== "Delivered" && order.status !== "Canceled" && (
+        <Button variant="danger" onClick={() => cancelOrder(order._id)}>
+          Cancel
+        </Button>
+      )}
+    </div>
+  </Card.Body>
+</Card>
+
   );
 
   return (
