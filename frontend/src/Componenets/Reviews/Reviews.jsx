@@ -7,7 +7,7 @@ import ReviewList from "./ReviewList";
 import ReviewForm from "./ReviewForm";
 import { decodeToken } from "react-jwt";
 
-const API_BASE_URL = "http://localhost:4000/api/v1";
+const API_BASE_URL = "/api/v1";
 
 const Reviews = ({ bookID }) => {
   const [reviews, setReviews] = useState([]);
