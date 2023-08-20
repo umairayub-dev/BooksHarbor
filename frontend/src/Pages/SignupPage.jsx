@@ -61,7 +61,7 @@ const SignupPage = () => {
     <div className="row justify-content-sm-center min-vh-100 min-vw-100 h-100 bg-main">
       <div className="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
         <div className="text-center my-5">
-          <h2 className="color-green fw-bolder fs-1">Mflix</h2>
+          <h2 className="color-green fw-bolder fs-1">BookHarbor</h2>
         </div>
         <Card className="shadow-lg" bg="dark" data-bs-theme="dark">
           <div className="card-body p-5">
