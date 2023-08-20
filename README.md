@@ -341,6 +341,7 @@ Add a new book to the collection.
 | `category`      | `string` | Category of the book       |
 | `stock`         | `number` | Available stock count      |
 | `coverImage`    | `string` | Cover image URL            |
+| `images`        | `array`  | Array of image URLs        |
 
 **Responses:**
 
