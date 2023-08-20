@@ -19,7 +19,6 @@ const SignupPage = () => {
       axios
         .post("/api/v1/signup", { username, email, password })
         .then((response) => {
-          // Successful signup
           showToast("success", "Signup successful", 100, 2000);
           navigate("/login");
         })

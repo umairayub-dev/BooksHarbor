@@ -182,7 +182,7 @@ body {
 .dashboard-card:hover {
   transform: translateY(-5px);
 }
-/* Add these styles for the overlay */
+
 .overlay {
   position: absolute;
   top: 0;
