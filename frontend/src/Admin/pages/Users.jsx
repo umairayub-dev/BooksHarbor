@@ -11,7 +11,7 @@ const UsersPage = () => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const BASE_URL = "https://victorious-lion-clothes.cyclic.cloud/api/users";
+  const BASE_URL = "/api/v1/users";
   const headers = {
     headers: {
       Authorization: `Bearer ${state?.token}`,
@@ -40,7 +40,7 @@ const UsersPage = () => {
     try {
       await axios
         .delete(
-          `https://victorious-lion-clothes.cyclic.cloud/api/user/${id}`,
+          `/api/v1/user/${id}`,
           headers
         )
         .then((response) => {
