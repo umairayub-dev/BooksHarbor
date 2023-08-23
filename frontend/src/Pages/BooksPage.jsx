@@ -232,7 +232,7 @@ const BooksPage = () => {
           ) : error ? (
             <p>Error loading books.</p>
           ) : (
-            <div>
+            <div className="container-fluid">
               <Form className="px-5 mb-3" onSubmit={handleSearchFormSubmit}>
                 <Form.Group controlId="searchForm" className="input-group">
                   <Form.Control
@@ -251,8 +251,8 @@ const BooksPage = () => {
                 </Form.Group>
               </Form>
               {booksData.books.length > 0 ? (
-                <div className="d-flex flex-column align-items-center gap-5">
-                  <Row className="justify-content-center">
+                <div className="d-flex flex-column align-items-center gap-5 ">
+                  <Row className="justify-content-center container">
                     {booksData.books.map((book) => (
                       <Col key={book._id} xs={6} sm={4} md={4} lg={3}>
                       <div className="card-container">
