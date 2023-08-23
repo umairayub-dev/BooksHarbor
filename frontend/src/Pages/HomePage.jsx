@@ -39,7 +39,7 @@ const HomePage = () => {
     setLoadingCategories(true);
     setLoadingFeaturedBooks(true);
     axios
-      .get("/api/v1//featured-books")
+      .get("/api/v1/featured-books")
       .then((response) => {
         console.log(response.data);
         setFeaturedBooks(response.data);
@@ -79,25 +79,29 @@ const HomePage = () => {
       <Slider />
 
       <section className="py-5">
-        <Container className="my-5">
-          <h2 className="text-center mb-4">Featured Books</h2>
-          <Row className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 justify-content-center">
-            {loadingFeaturedBooks ? (
-              <Col className="text-center">
-                <Spinner animation="border" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </Spinner>
-              </Col>
-            ) : (
-              featuredBooks.map((featuredBook) => (
-                <Col key={featuredBook.id}>
-                  <BookCard book={featuredBook} />
-                </Col>
-              ))
-            )}
-          </Row>
-        </Container>
-      </section>
+  <Container className="my-5">
+    <h2 className="text-center mb-4">Featured Books</h2>
+    <Row className="justify-content-center">
+      {loadingFeaturedBooks ? (
+        <Col className="text-center">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </Col>
+      ) : (
+        featuredBooks.map((featuredBook) => (
+          <Col key={featuredBook._id} xs={6} sm={4} md={3} lg={2}>
+            <div className="card-container">
+              <BookCard book={featuredBook} />
+            </div>
+          </Col>
+        ))
+      )}
+    </Row>
+  </Container>
+</section>
+
+
 
       <section className="py-5">
         <Container className="my-5">

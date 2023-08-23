@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Badge, Button, Col, Offcanvas, Row } from "react-bootstrap";
-import { CartContext } from "../../Context/Cart/CartContext"; // Adjust the path if needed
+import { CartContext } from "../../Context/Cart/CartContext";
 import { FaShoppingBag } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
