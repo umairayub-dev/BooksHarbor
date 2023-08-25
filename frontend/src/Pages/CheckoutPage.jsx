@@ -25,6 +25,10 @@ const Checkout = () => {
     customerEmail: "",
     customerAddress: "",
     customerContact: "",
+    customerCountry: "",
+    customerState: "",
+    customerZipCode: "",
+    customerCity: ""
   });
   const [isLoading, setIsLoading] = useState(false);
   const showToast = useToast();
@@ -127,7 +131,9 @@ const Checkout = () => {
       className="p-5 min-vh-100 min-vw-100 h-100 bg-main text-white"
       bg="dark"
       data-bs-theme="dark"
-    >      {state.cart.length > 0 ? (
+    >
+      {" "}
+      {state.cart.length > 0 ? (
         <Row className="py-4">
           <Col md={7} lg={8} className="mb-2">
             <h2>Custom Information</h2>
@@ -174,6 +180,56 @@ const Checkout = () => {
               </Form.Group>
               <Row>
                 <Col>
+                  <Form.Group controlId="country">
+                    <Form.Label>Country</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter country"
+                      name="customerCountry"
+                      value={formData.customerCountry}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="city">
+                    <Form.Label>Ciry</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter City"
+                      name="customerCity"
+                      value={formData.custmerCity}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="state">
+                    <Form.Label>State</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter State"
+                      name="customerState"
+                      value={formData.customerState}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="zipCode">
+                    <Form.Label>Zip Code</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter zip code"
+                      name="customerZipCode"
+                      value={formData.customerZipCode}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
                   <Form.Group controlId="phone">
                     <Form.Label>Phone Number</Form.Label>
                     <Form.Control
@@ -185,6 +241,53 @@ const Checkout = () => {
                       required
                     />
                   </Form.Group>
+                  <Form.Group controlId="paymentMethod">
+                    <Form.Label>Payment Method:</Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="selectedPaymentMethod"
+                      value={formData.selectedPaymentMethod}
+                      onChange={handleInputChange}
+                    >
+                      <option value="credit-card">Credit Card</option>
+                      <option value="cod">Cash on Delivery</option>
+                    </Form.Control>
+                  </Form.Group>
+
+                  {formData.selectedPaymentMethod === "credit-card" && (
+                    <div>
+                      <Form.Group controlId="creditCardNumber">
+                        <Form.Label>Credit Card Number</Form.Label>
+                        <Form.Control
+                          type="text"
+                          placeholder="Enter credit card number"
+                          name="creditCardNumber"
+                          value={formData.creditCardNumber}
+                          onChange={handleInputChange}
+                        />
+                      </Form.Group>
+                      <Form.Group controlId="expirationDate">
+                        <Form.Label>Expiration Date</Form.Label>
+                        <Form.Control
+                          type="text"
+                          placeholder="MM/YY"
+                          name="expirationDate"
+                          value={formData.expirationDate}
+                          onChange={handleInputChange}
+                        />
+                      </Form.Group>
+                      <Form.Group controlId="cvv">
+                        <Form.Label>CVV</Form.Label>
+                        <Form.Control
+                          type="text"
+                          placeholder="Enter CVV"
+                          name="cvv"
+                          value={formData.cvv}
+                          onChange={handleInputChange}
+                        />
+                      </Form.Group>
+                    </div>
+                  )}
                 </Col>
               </Row>
               <Button variant="primary" type="submit" className="mt-3">
@@ -253,7 +356,6 @@ const Checkout = () => {
           </Col>
         </Row>
       )}
-
       <Modal
         show={showOrderModal}
         onHide={() => setShowOrderModal(false)}
