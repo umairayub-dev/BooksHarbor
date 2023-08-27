@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
   Container,
-  ListGroup,
   Badge,
   Form,
   Button,
   Row,
-  Col,
   Spinner,
   Alert,
 } from "react-bootstrap";

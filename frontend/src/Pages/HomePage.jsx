@@ -12,9 +12,7 @@ const HomePage = () => {
   const [categories, setCategories] = useState([]);
   const [publishers, setPublishers] = useState([]);
   const [featuredBooks, setFeaturedBooks] = useState([]);
-  const [loadingCategories, setLoadingCategories] = useState(false);
-  const [loadingPublishers, setLoadingPublishers] = useState(false);
-  const [loadingFeaturedBooks, setLoadingFeaturedBooks] = useState(false);
+  const [loading, setLoading] = useState(true)  
   const testimonials = [
     {
       id: 1,
@@ -35,44 +33,26 @@ const HomePage = () => {
       text: "I love this store's attention to detail. From the website design to the product packaging, everything is top-notch.",
     },
   ];
-  useEffect(() => {
-    setLoadingCategories(true);
-    setLoadingFeaturedBooks(true);
-    axios
-      .get("/api/v1/featured-books")
-      .then((response) => {
-        console.log(response.data);
-        setFeaturedBooks(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching books products:", error);
-      })
-      .finally(() => {
-        setLoadingFeaturedBooks(false);
-      });
+  
 
-    axios
-      .get("/api/v1/all-categories")
-      .then((response) => {
-        setCategories(response.data.categories);
-      })
-      .catch((error) => {
-        console.error("Error fetching categories:", error);
-      })
-      .finally(() => {
-        setLoadingCategories(false);
-      });
-    axios
-      .get("/api/v1/all-publishers")
-      .then((response) => {
-        setPublishers(response.data.publishers);
-      })
-      .catch((error) => {
-        console.error("Error fetching publishers:", error);
-      })
-      .finally(() => {
-        setLoadingPublishers(false);
-      });
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [booksResponse,categoriesResponse, publishersResponse] = await Promise.all([
+          axios.get("/api/v1/featured-books"),
+          axios.get("/api/v1/all-categories"),
+          axios.get("/api/v1/all-publishers"),
+        ]);
+        setFeaturedBooks(booksResponse.data)
+        setCategories(categoriesResponse.data.categories);
+        setPublishers(publishersResponse.data.publishers);
+        setLoading(false);
+      } catch (error) {
+        // console.log(error)
+        setLoading(false);
+      }
+    }
+    fetchData();
   }, []);
   return (
     <div>
@@ -82,7 +62,7 @@ const HomePage = () => {
   <Container className="my-5">
     <h2 className="text-center mb-4">Featured Books</h2>
     <Row className="justify-content-center">
-      {loadingFeaturedBooks ? (
+      {loading ? (
         <Col className="text-center">
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -108,7 +88,7 @@ const HomePage = () => {
           <h2 className="text-center mb-4">Categories</h2>
           <Row className="justify-content-center">
             <div className="d-flex flex-wrap p-3">
-              {loadingCategories ? (
+              {loading ? (
                 <Col className="text-center">
                   <Spinner animation="border" role="status">
                     <span className="visually-hidden">Loading...</span>
@@ -132,7 +112,7 @@ const HomePage = () => {
           <h2 className="text-center mb-4">Publishers</h2>
           <Row className="justify-content-center">
             <div className="d-flex flex-wrap p-3">
-              {loadingPublishers ? (
+              {loading ? (
                 <Col className="text-center">
                   <Spinner animation="border" role="status">
                     <span className="visually-hidden">Loading...</span>

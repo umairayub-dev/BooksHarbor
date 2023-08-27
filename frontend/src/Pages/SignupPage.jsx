@@ -24,14 +24,9 @@ const SignupPage = () => {
         })
         .catch((error) => {
           if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-
-            // Display the status code and error message
             console.error("Status Code:", error.response.status);
             console.error("Error Message:", error.response.data);
 
-            // You can handle specific error codes if needed
             if (error.response.status === 400) {
               showToast("error", error.response.data.error, 100, 2000);
             } else if (error.response.status === 500) {
@@ -40,11 +35,8 @@ const SignupPage = () => {
               showToast("error", "Unknown Error", 100, 2000);
             }
           } else if (error.request) {
-            // The request was made but no response was received
             showToast("error", "Unknown error", 100, 2000);
-            // console.error("No response received:", error.request);
           } else {
-            // Other errors, including network issues
             showToast("error", "Something went wrong", 100, 2000);
           }
         })

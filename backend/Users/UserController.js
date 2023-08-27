@@ -9,6 +9,28 @@ const createToken = (id, role, username, tokenVersion) => {
     expiresIn: "3d",
   });
 };
+
+const verifyToken = async (req, res) => {
+  const { token } = req.body;
+
+  if (!token) {
+    return res.status(400).json({ message: 'Token not provided.' });
+  }
+
+  try {
+    const { id, tokenVersion } = jwt.verify(token, process.env.SECRET);
+
+    // Verify token version against the stored version in user's record
+    const user = await User.findOne({ _id: id }).select("_id tokenVersion");
+    if (!user || user.tokenVersion !== tokenVersion) {
+      return res.status(200).json({ valid: false });
+    }
+
+    return res.status(200).json({ valid: true });
+  } catch (error) {
+    return res.status(200).json({ valid: false });
+  }
+}
 // login user
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -200,4 +222,5 @@ module.exports = {
   deleteUser,
   updateUser,
   getUsers,
+  verifyToken,
 };

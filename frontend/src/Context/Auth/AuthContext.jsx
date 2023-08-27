@@ -1,6 +1,7 @@
 import { createContext, useEffect, useReducer } from "react";
 import { AuthReducer } from "./AuthReducer";
 import Cookies from "js-cookie";
+import axios from "axios";
 
 export const AuthContext = createContext();
 
@@ -13,6 +14,22 @@ const initialState = {
 export const AuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
+  useEffect(() => {
+    const verifyToken = async (token) => {
+      try {
+        const response = await axios.post('http://localhost:4000/api/v1/verify-token', { token });
+        return response.data.valid;
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    verifyToken(state.token).then((valid) => {
+      if (!valid) {
+        dispatch('LOGOUT_USER')
+      }
+    })
+    
+  }, [])
   useEffect(() => {
     Cookies.set("token", state.token);
   }, [state.token]);

@@ -28,9 +28,8 @@ const Checkout = () => {
     customerCountry: "",
     customerState: "",
     customerZipCode: "",
-    customerCity: ""
+    customerCity: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
   const showToast = useToast();
   const handleQuantityDecrease = (itemId) => {
     const itemToUpdate = state.cart.find((item) => item._id === itemId);
@@ -57,7 +56,6 @@ const Checkout = () => {
   };
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
     const order = {
       products: [...state.cart],
       totalAmount: calculateSubtotal(),
@@ -91,8 +89,6 @@ const Checkout = () => {
     } catch (error) {
       console.error("Error placing order:", error);
       showToast("error", "Failed to place the order. Please try again.", 3000);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -192,7 +188,7 @@ const Checkout = () => {
                     />
                   </Form.Group>
                   <Form.Group controlId="city">
-                    <Form.Label>Ciry</Form.Label>
+                    <Form.Label>City</Form.Label>
                     <Form.Control
                       type="text"
                       placeholder="Enter City"

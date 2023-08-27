@@ -9,8 +9,8 @@ import {
   Alert,
 } from "react-bootstrap";
 import axios from "axios";
-import {useSearchParams } from "react-router-dom";
-import BookCard from '../Componenets/Cards/BookCard'
+import { useSearchParams } from "react-router-dom";
+import BookCard from "../Componenets/Cards/BookCard";
 import useToast from "../Hooks/useToast";
 import MyPagination from "../Componenets/Pagination/MyPagination";
 
@@ -221,10 +221,10 @@ const BooksPage = () => {
         </Col>
 
         <Col
-  xs={12} 
-  md={9}
-  className="p-4 d-flex flex-column justify-content-center align-items-center"
->
+          xs={12}
+          md={9}
+          className="p-4 d-flex flex-column justify-content-center align-items-center"
+        >
           {loadingBooks ? (
             <Spinner animation="border" className="color-green" role="status">
               <span className="visually-hidden">Loading...</span>
@@ -255,10 +255,10 @@ const BooksPage = () => {
                   <Row className="justify-content-center container">
                     {booksData.books.map((book) => (
                       <Col key={book._id} xs={6} sm={4} md={4} lg={3}>
-                      <div className="card-container">
-                        <BookCard book={book} />
-                      </div>
-                    </Col>
+                        <div className="card-container">
+                          <BookCard book={book} />
+                        </div>
+                      </Col>
                     ))}
                   </Row>
                   <MyPagination

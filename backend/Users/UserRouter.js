@@ -10,8 +10,10 @@ const {
   updateUser,
   getUsers,
   updateUserRole,
+  verifyToken,
 } = require("./UserController");
 
+router.post('/verify-token', verifyToken)
 router.post("/login", loginUser);
 router.post("/signup", signupUser);
 
