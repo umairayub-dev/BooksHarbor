@@ -58,6 +58,24 @@ const UsersPage = () => {
       setIsLoading(false);
     }
   };
+
+  const handleRoleChange = async (userId, newRole) => {
+    setIsLoading(true);
+    try {
+      await axios.patch(`/api/v1/update-role/${userId}`, {role: newRole}, headers).then((response) => {
+        showToast('success', 'User Role Updated', 100, 1800)
+        setUsers(response.data.users)
+        setIsLoading(false)
+      }).catch((error) => {
+        showToast('error', "Unable to update user role", 100, 1800)
+        setIsLoading(false)
+      })
+    } catch (error) {
+      showToast('error', "Unable to update user role", 100, 1800)
+      setIsLoading(false)
+    }
+    console.log(`Updating role of user ${userId} to ${newRole}`);
+  };
   return (
     <div
       className="min-vh-100 h-100 bg-main text-white"
@@ -79,6 +97,7 @@ const UsersPage = () => {
               users={users}
               handleDelete={handleDelete}
               token={state?.token}
+              handleRoleChange={handleRoleChange}
             />
           </div>
         )}

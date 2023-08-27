@@ -27,12 +27,24 @@ const userSchema = new Schema({
     enum: ["user", "admin"],
     default: "user",
   },
-
   joined: {
     type: Date,
     default: Date.now(),
   },
+  tokenVersion: {
+    type: Number,
+    default: 0,
+  },
 });
+
+// Middleware to increment tokenVersion on each save (e.g., when role changes)
+userSchema.pre("save", function (next) {
+  if (this.isModified("role") || this.isModified("password")) {
+    this.tokenVersion += 1;
+  }
+  next();
+});
+
 const userModel = mongoose.model("User", userSchema);
 
 module.exports = userModel;

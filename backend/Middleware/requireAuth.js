@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const User = require("../Users/UserModel");
 
 const requireAuth = async (req, res, next) => {
-  // verify user is authenticated
   const { authorization } = req.headers;
 
   if (!authorization) {
@@ -12,19 +11,26 @@ const requireAuth = async (req, res, next) => {
   const token = authorization.split(" ")[1];
 
   try {
-    const { id } = jwt.verify(token, process.env.SECRET);
+    const { id, tokenVersion } = jwt.verify(token, process.env.SECRET);
 
-    req.user = await User.findOne({ _id: id }).select("_id role");
+    // Verify token version against the stored version in user's record
+    const user = await User.findOne({ _id: id }).select("_id role tokenVersion");
+    console.log(user);
+    if (!user || user.tokenVersion !== tokenVersion) {
+      console.log(user.tokenVersion, tokenVersion);
+      return res.status(401).json({ error: "Unauthorized request" });
+    }
+
+    req.user = user;
     next();
   } catch (error) {
-    console.log(error);
-    res.status(401).json({ error: "Request is not authorized" });
+    console.error(error);
+    res.status(401).json({ error: "Unauthorized request" });
   }
 };
 
 const requireRole = (role) => {
   return (req, res, next) => {
-    console.log(role, req.user);
     if (!req.user || !req.user.role || req.user.role !== role) {
       return res.status(403).json({ error: "Access forbidden" });
     }

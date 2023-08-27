@@ -9,6 +9,7 @@ const {
   deleteUser,
   updateUser,
   getUsers,
+  updateUserRole,
 } = require("./UserController");
 
 router.post("/login", loginUser);
@@ -18,6 +19,8 @@ router.get("/profile", requireAuth, getProfile);
 router.get("/users", requireAuth, requireRole("admin"), getUsers);
 
 router.patch("/profile", requireAuth, updateUser);
+// Admin can change user roles ['admin', 'user']
+router.patch("/update-role/:id", requireAuth,requireRole('admin'), updateUserRole);
 router.delete("/user/:id", requireAuth, requireRole("admin"), deleteUser);
 
 module.exports = router;

@@ -2,11 +2,13 @@ import React from "react";
 import { formatDate } from "../../utils/date";
 import { MdDelete } from "react-icons/md";
 import { decodeToken } from "react-jwt";
-const UsersTable = ({ users, handleDelete, token }) => {
+const UsersTable = ({ users, handleDelete, token, handleRoleChange }) => {
   const decodeUser = () => {
     const user = decodeToken(token);
     return user?.id;
   };
+
+  
   return (
     <div className="table-responsive">
       <table className="table table-dark table-striped">
@@ -16,6 +18,7 @@ const UsersTable = ({ users, handleDelete, token }) => {
             <th>Username</th>
             <th>Email</th>
             <th>Joined</th>
+            <th>Role</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -28,6 +31,15 @@ const UsersTable = ({ users, handleDelete, token }) => {
                 <td>{user.username}</td>
                 <td>{user.email}</td>
                 <td>{formatDate(user.joined)}</td>
+                <td>
+                  <select
+                    value={user.role}
+                    onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                  >
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </td>
                 <td
                   className="cursor-pointer"
                   onClick={() => handleDelete(user._id)}

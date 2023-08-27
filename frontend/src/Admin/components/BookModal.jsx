@@ -3,14 +3,34 @@ import { useEffect } from "react";
 import { Modal, Button, Form, Spinner } from "react-bootstrap";
 import { storage } from "../../utils/firebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
+import useToast  from '../../Hooks/useToast'
+import axios from 'axios'
 const BookModal = ({ show, handleClose, handleSave, bookData }) => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
   const fileInputRef = useRef(null);
+  const [categories, setCategories] = useState([])
+  const [publishers, setPublishers] = useState([])
+  const showToast = useToast()
+
 
   useEffect(() => {
+    async function fetchData() {
+      try {
+        const [categoriesResponse, publishersResponse] = await Promise.all([
+          axios.get("https://bookharbor.cyclic.cloud/api/v1/all-categories"),
+          axios.get("https://bookharbor.cyclic.cloud/api/v1/all-publishers"),
+        ]);
+        setCategories(categoriesResponse.data.categories);
+        setPublishers(publishersResponse.data.publishers);
+      } catch (error) {
+        showToast('error', 'Something went wrong', 100, 1800)
+        console.log(error);
+      }
+    }
+    fetchData();
+
     if (bookData) {
       const formattedDate = new Date(bookData.publish_date)
         .toISOString()
@@ -24,12 +44,14 @@ const BookModal = ({ show, handleClose, handleSave, bookData }) => {
     }
   }, [bookData]);
 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
+    console.log(formData);
   };
 
   const handleImageUpload = async (e, imageField) => {
@@ -70,12 +92,16 @@ const BookModal = ({ show, handleClose, handleSave, bookData }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleSave(
-      { ...formData, images: selectedImages },
-      bookData ? true : false
-    );
-    setFormData({});
-    setSelectedImages([]);
+    if (!formData.category || !formData.publisher) {
+      showToast('error','Publisher or Category not set', 100,1800)
+    }else {
+      handleSave(
+        { ...formData, images: selectedImages },
+        bookData ? true : false
+      );
+      setFormData({});
+      setSelectedImages([]);
+    }
   };
 
   const clearStateAndClose = () => {
@@ -207,26 +233,39 @@ const BookModal = ({ show, handleClose, handleSave, bookData }) => {
               required
             />
           </Form.Group>
-          <Form.Group controlId="publisher">
-            <Form.Label>Publisher</Form.Label>
-            <Form.Control
-              type="text"
-              name="publisher"
-              value={formData?.publisher || ""}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group controlId="category">
-            <Form.Label>Category</Form.Label>
-            <Form.Control
-              type="text"
-              name="category"
-              value={formData?.category || ""}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
+          <Form.Group className="mt-3">
+                  <Form.Label>Category</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                  >
+                  <option value="">Select a category</option>
+                    {categories.map((category) => (
+                      <option key={category._id} value={category.CategoryName}>
+                        {category.CategoryName}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
+
+                <Form.Group className="mt-3">
+                  <Form.Label>Publisher</Form.Label>
+                  <Form.Control
+                    as="select"
+                    name="publisher"
+                    value={formData.publisher}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select a Publisher</option>
+                    {publishers.map((publisher) => (
+                      <option key={publisher._id} value={publisher.name}>
+                        {publisher.name}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
           <Form.Group controlId="publish_date">
             <Form.Label>Publish Date</Form.Label>
             <Form.Control

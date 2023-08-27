@@ -4,8 +4,8 @@ const validator = require("validator");
 const bcrypt = require("bcrypt");
 const {sendSignupEmail} = require("../Mailer/sendMail");
 
-const createToken = (id, role, username) => {
-  return jwt.sign({ id, role, username }, process.env.SECRET, {
+const createToken = (id, role, username, tokenVersion) => {
+  return jwt.sign({ id, role, username, tokenVersion}, process.env.SECRET, {
     expiresIn: "3d",
   });
 };
@@ -29,7 +29,7 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    const token = createToken(user._id, user.role, user.username);
+    const token = createToken(user._id, user.role, user.username, user.tokenVersion);
 
     return res.status(200).json({
       message: "Login successful",
@@ -90,7 +90,7 @@ const signupUser = async (req, res) => {
       password: hashedPassword,
     });
 
-    const token = createToken(user._id, user.role, user.username);
+    const token = createToken(user._id, user.role, user.username, user.tokenVersion);
     sendSignupEmail(email, username);
     return res.status(201).json({
       message: "Signed up successfully",
@@ -142,7 +142,7 @@ const updateUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const token = createToken(updatedUser._id, updatedUser.role, updatedUser.username);
+    const token = createToken(updatedUser._id, updatedUser.role, updatedUser.username, updatedUser.tokenVersion);
     res
       .status(200)
       .json({ message: "User updated successfully", user: updatedUser, token });
@@ -151,6 +151,31 @@ const updateUser = async (req, res) => {
   }
 };
 
+const updateUserRole = async (req, res) => {
+  const { role } = req.body;
+  const {id } = req.params
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { role },
+      {
+        new: true,
+      }
+    ).select("-password");
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const users = await User.find().select("-password")
+    res
+      .status(200)
+      .json({ message: "User updated successfully", users});
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 const getUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password");
@@ -168,6 +193,7 @@ const getUsers = async (req, res) => {
 };
 
 module.exports = {
+  updateUserRole,
   loginUser,
   signupUser,
   getProfile,
