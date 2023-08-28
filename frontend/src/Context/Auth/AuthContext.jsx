@@ -17,7 +17,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const verifyToken = async (token) => {
       try {
-        const response = await axios.post('http://localhost:4000/api/v1/verify-token', { token });
+        const response = await axios.post('/api/v1/verify-token', { token });
         return response.data.valid;
       } catch (error) {
         console.log(error)
